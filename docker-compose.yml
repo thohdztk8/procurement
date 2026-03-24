@@ -81,8 +81,6 @@ services:
         python manage.py migrate notifications &&
         python manage.py makemigrations finance &&
         python manage.py migrate finance &&
-        python manage.py makemigrations reports &&
-        python manage.py migrate reports &&
         python manage.py makemigrations audit_log &&
         python manage.py migrate audit_log &&
         python manage.py collectstatic --noinput &&
