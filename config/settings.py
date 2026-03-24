@@ -11,6 +11,10 @@ DEBUG = config("DEBUG", default=True, cast=bool)
 ALLOWED_HOSTS = config("ALLOWED_HOSTS", default="*", cast=Csv())
 
 # ── Applications ──────────────────────────────────────────────
+AUTH_APPS = [
+    "apps.authentication",
+]
+
 DJANGO_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
@@ -29,7 +33,6 @@ THIRD_PARTY_APPS = [
 ]
 
 LOCAL_APPS = [
-    "apps.authentication",
     "apps.master_data",
     "apps.requisition",
     "apps.cart",
@@ -42,7 +45,9 @@ LOCAL_APPS = [
     "apps.audit_log",
 ]
 
-INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
+INSTALLED_APPS = AUTH_APPS + DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
+
+LOCAL_APPS = AUTH_APPS + LOCAL_APPS
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",

@@ -6,6 +6,7 @@ services:
     container_name: procurement_db
     environment:
       SA_PASSWORD: "${MSSQL_SA_PASSWORD:-StrongP@ss123!}"
+      MSSQL_SA_PASSWORD: "${MSSQL_SA_PASSWORD:-StrongP@ss123!}"
       ACCEPT_EULA: "Y"
       MSSQL_PID: "Developer"
     ports:
@@ -21,6 +22,26 @@ services:
       start_period: 60s
     networks:
       - procurement_net
+
+  init-db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - procurement_net
+    entrypoint: >
+      bash -c "
+      echo 'Waiting for DB...' &&
+      sleep 5 &&
+      /opt/mssql-tools18/bin/sqlcmd -S db -U sa -P '$MSSQL_SA_PASSWORD' -No -Q \"
+      IF DB_ID('ProcurementDB') IS NULL
+      BEGIN
+          CREATE DATABASE ProcurementDB COLLATE Vietnamese_CI_AS;
+      END
+      \" &&
+      echo 'DB ready'
+      "
 
   redis:
     image: redis:7-alpine
@@ -38,11 +59,15 @@ services:
       dockerfile: docker/Dockerfile
     container_name: procurement_web
     command: >
-      sh -c "python manage.py wait_for_db &&
-             python manage.py migrate &&
-             python manage.py seed_roles &&
-             python manage.py collectstatic --noinput &&
-             gunicorn config.wsgi:application --bind 0.0.0.0:8000 --workers 4 --timeout 120"
+      sh -c "
+        python manage.py wait_for_db &&
+        python manage.py makemigrations authentication &&
+        python manage.py migrate authentication &&
+        python manage.py migrate &&
+        python manage.py seed_roles &&
+        python manage.py collectstatic --noinput &&
+        gunicorn config.wsgi:application --bind 0.0.0.0:8000
+      "
     volumes:
       - .:/app
       - media_files:/app/media
