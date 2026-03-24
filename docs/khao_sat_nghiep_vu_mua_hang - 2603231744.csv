@@ -1,0 +1,46 @@
+Nhóm,No,Câu hỏi,Trả lời,Gợi ý khai thác,Mức độ ưu tiên
+1. Tổ chức & quy trình,1.1,Doanh nghiệp có bao nhiêu bộ phận/phòng ban tham gia vào quy trình mua hàng?,"phòng mua hàng, kho, sản xuất, kế toán, ban giám đốc","Ví dụ: phòng mua hàng, kho, sản xuất, kế toán, ban giám đốc. Mỗi bộ phận đóng vai trò gì (người yêu cầu, người duyệt, người thực hiện)?",Bắt buộc
+1. Tổ chức & quy trình,1.2,Quy trình mua hàng hiện tại được thực hiện như thế nào? Đang dùng công cụ gì?,Trong file workflow đính kèm,"Excel, email, phần mềm cũ, hay quy trình giấy tờ? Xác định điểm đau (pain point) lớn nhất hiện tại là gì.",Bắt buộc
+1. Tổ chức & quy trình,1.3,Khối lượng mua hàng trung bình hàng tháng là bao nhiêu đơn/yêu cầu?,50-500,"Ước lượng số lượng PO, số dòng hàng, số nhà cung cấp giao dịch mỗi tháng.",Bắt buộc
+1. Tổ chức & quy trình,1.4,Doanh nghiệp có nhiều nhà máy/chi nhánh cần mua hàng không?,2,"Nếu có, mua hàng tập trung hay phân quyền cho từng chi nhánh? Cần phân biệt kho của từng địa điểm không?",Tuỳ chọn
+1. Tổ chức & quy trình,1.5,Có phân loại vật tư/hàng hóa theo danh mục không? Danh mục hiện tại gồm bao nhiêu nhóm chính?,Có,"Ví dụ: nguyên vật liệu, bao bì, vật tư tiêu hao, máy móc thiết bị, dịch vụ thuê ngoài.",Bắt buộc
+2. Quản lý nhà cung cấp,2.1,Hiện tại doanh nghiệp có bao nhiêu nhà cung cấp đang hoạt động?,50,"Phân loại theo nội địa / nhập khẩu, theo nhóm hàng, hoặc theo mức độ chiến lược?",Bắt buộc
+2. Quản lý nhà cung cấp,2.2,Quy trình đăng ký và phê duyệt nhà cung cấp mới hiện nay như thế nào?,Trong file workflow đính kèm,Ai được phép thêm nhà cung cấp mới? Cần giấy tờ gì? Có danh sách nhà cung cấp đủ điều kiện (AVL) không?,Bắt buộc
+2. Quản lý nhà cung cấp,2.3,Doanh nghiệp có đánh giá/chấm điểm nhà cung cấp định kỳ không?,Có,"Tiêu chí đánh giá là gì (giao hàng đúng hạn, chất lượng, giá cả, phản hồi)? Tần suất đánh giá? Kết quả ảnh hưởng đến quyết định mua hàng không?",Tuỳ chọn
+2. Quản lý nhà cung cấp,2.4,Có yêu cầu lưu trữ hợp đồng khung hoặc điều khoản giá thỏa thuận với nhà cung cấp không?,Có (optional),"Hợp đồng dài hạn, bảng giá ưu đãi, điều khoản thanh toán riêng theo từng nhà cung cấp.",Tuỳ chọn
+2. Quản lý nhà cung cấp,2.5,Khi mua một mặt hàng có yêu cầu so sánh giá từ nhiều nhà cung cấp (chào giá cạnh tranh) không?,Có (optional),Ngưỡng giá trị bao nhiêu thì cần lấy ít nhất 3 báo giá? Ai phê duyệt kết quả chào giá?,Bắt buộc
+3. Yêu cầu & phê duyệt,3.1,Ai được phép tạo yêu cầu mua hàng (Purchase Requisition)?,Trong file workflow đính kèm,"Chỉ bộ phận mua hàng, hay bất kỳ phòng ban nào cũng có thể gửi yêu cầu? Yêu cầu mua có liên kết với kế hoạch sản xuất/MRP không?",Bắt buộc
+3. Yêu cầu & phê duyệt,3.2,Quy trình phê duyệt yêu cầu mua hàng gồm mấy cấp? Dựa trên tiêu chí gì?,Trong file workflow đính kèm,Ví dụ: < 5 triệu → trưởng phòng duyệt; 5–50 triệu → giám đốc duyệt; > 50 triệu → hội đồng duyệt. Phê duyệt song song hay tuần tự?,Bắt buộc
+3. Yêu cầu & phê duyệt,3.3,Yêu cầu mua có thể bị từ chối hoặc yêu cầu chỉnh sửa không? Luồng xử lý khi đó như thế nào?,Có,Người tạo yêu cầu có nhận thông báo không? Có thể chỉnh sửa và tái gửi duyệt không?,Bắt buộc
+3. Yêu cầu & phê duyệt,3.4,Có trường hợp mua hàng khẩn cấp (bypass quy trình thông thường) không? Xử lý như thế nào?,Có,Ai có quyền duyệt mua khẩn? Sau đó có bổ sung thủ tục đầy đủ không?,Tuỳ chọn
+3. Yêu cầu & phê duyệt,3.5,Có yêu cầu lập kế hoạch mua hàng theo tuần/tháng/quý không?,Có (optional),Kế hoạch mua có liên kết với kế hoạch sản xuất hay dự báo tồn kho không? Ai chịu trách nhiệm lập và duyệt kế hoạch?,Tuỳ chọn
+4. Đơn đặt hàng (PO),4.1,PO được tạo tự động từ yêu cầu đã duyệt hay nhân viên mua hàng tự tạo thủ công?,nhân viên mua hàng tạo thủ công,Có thể gộp nhiều yêu cầu thành một PO không? Hay mỗi yêu cầu là một PO riêng?,Bắt buộc
+4. Đơn đặt hàng (PO),4.2,PO có cần phê duyệt nội bộ trước khi gửi cho nhà cung cấp không?,Có,Cấp duyệt PO có khác cấp duyệt yêu cầu mua không? Ngưỡng giá trị duyệt PO là bao nhiêu?,Bắt buộc
+4. Đơn đặt hàng (PO),4.3,PO được gửi cho nhà cung cấp bằng phương thức nào?,Gửi email,"Email tự động, in và fax, cổng nhà cung cấp, hay EDI? Nhà cung cấp có cần xác nhận nhận PO không?",Bắt buộc
+4. Đơn đặt hàng (PO),4.4,Khi cần thay đổi PO đã gửi (điều chỉnh số lượng - giá - ngày giao) quy trình xử lý như thế nào?,Trong file workflow đính kèm,Có lưu lịch sử thay đổi PO không? Cần phê duyệt lại từ đầu hay chỉ cần ký phụ lục?,Tuỳ chọn
+4. Đơn đặt hàng (PO),4.5,Có sử dụng Blanket PO (PO mở/khung) hay PO định kỳ với nhà cung cấp chiến lược không?,Có (optional),Theo dõi số lượng đã giao/còn lại trong PO khung như thế nào? Ai theo dõi hạn mức?,Tuỳ chọn
+5. Nhận hàng & kho,5.1,Quy trình nhận hàng tại kho được thực hiện như thế nào?,Trong file workflow đính kèm,Ai kiểm tra hàng hóa khi nhận? Đối chiếu với PO và phiếu giao hàng (Delivery Note) như thế nào? Có dùng thiết bị barcode/RFID không?,Bắt buộc
+5. Nhận hàng & kho,5.2,Nếu hàng nhận không đủ số lượng hoặc không đạt chất lượng thì quy trình xử lý như thế nào?,,"Nhận một phần, từ chối, hay đặt vào khu cách ly (quarantine)? Ai chịu trách nhiệm thông báo cho nhà cung cấp và bộ phận mua hàng?",Bắt buộc
+5. Nhận hàng & kho,5.3,Có quy trình kiểm tra chất lượng đầu vào (IQC) trước khi nhập kho chính thức không?,Việc này không nằm trong hệ thống hiện tại,Bộ phận QC có phối hợp với mua hàng như thế nào? Kết quả IQC có ảnh hưởng đến việc chốt hóa đơn không?,Tuỳ chọn
+5. Nhận hàng & kho,5.4,Hàng nhập kho có cần theo dõi theo lô (batch) - hạn sử dụng - hay serial number không?,Có (optional),Ảnh hưởng đến quy tắc xuất kho (FIFO/FEFO/LIFO) và truy xuất nguồn gốc.,Tuỳ chọn
+5. Nhận hàng & kho,5.5,Kho có nhiều vị trí (location/bin) không? Cần theo dõi tồn kho theo từng vị trí không?,Có (optional),"Yêu cầu về quản lý kho đa tầng: khu nhận, khu lưu trữ, khu sản xuất, khu hoàn thành?",Tuỳ chọn
+6. Thanh toán & kế toán,6.1,Quy trình đối soát 3 chiều (PO – Phiếu nhận hàng – Hóa đơn) hiện tại thực hiện như thế nào?,Trong file workflow đính kèm,"Ai chịu trách nhiệm khớp lệnh? Sai lệch cho phép tối đa bao nhiêu (về số lượng, giá trị)?",Bắt buộc
+6. Thanh toán & kế toán,6.2,Điều kiện thanh toán (payment terms) với nhà cung cấp được quản lý ở đâu và như thế nào?,Trong file workflow đính kèm,"Net 30, 45, 60 ngày? Thanh toán trước, đặt cọc? Ai được phép thay đổi điều khoản thanh toán?",Bắt buộc
+6. Thanh toán & kế toán,6.3,Phần mềm kế toán/ERP đang sử dụng là gì? Cần tích hợp dữ liệu sang kế toán như thế nào?,"Hiện tại chưa cần tích hợp, kế toán sẽ trực tiếp xử lý trên hệ thống hiện tại sau khi thực hiện các nghiệp vụ trên phần mềm kế toán","MISA, Fast, SAP, Oracle, hoặc phần mềm nội bộ? Tích hợp realtime hay cuối ngày? Các bút toán nào cần tự động hóa?",Bắt buộc
+6. Thanh toán & kế toán,6.4,Có yêu cầu quản lý thuế GTGT đầu vào và các loại thuế liên quan trong quy trình mua hàng không?,Không,"Hoá đơn VAT điện tử, khấu trừ thuế tại nguồn (withholding tax) với nhà cung cấp dịch vụ?",Tuỳ chọn
+6. Thanh toán & kế toán,6.5,Có trường hợp trả hàng hoặc đề nghị hoàn tiền/đổi hàng sau khi đã thanh toán không?,Có,Quy trình xử lý Debit Note / Credit Note với nhà cung cấp như thế nào?,Tuỳ chọn
+7. Báo cáo & tích hợp,7.1,Các báo cáo mua hàng nào là quan trọng và cần xem thường xuyên nhất?,"tình trạng PO, hiệu suất nhà cung cấp, chi phí mua theo danh mục, công nợ phải trả.","Ví dụ: tình trạng PO, hiệu suất nhà cung cấp, chi phí mua theo danh mục, tồn kho sắp hết, công nợ phải trả.",Bắt buộc
+7. Báo cáo & tích hợp,7.2,Hệ thống nào cần tích hợp với hệ thống mua hàng mới?,Hiện tại không cần tích hợp,"ERP, phần mềm sản xuất (MES), WMS, phần mềm kế toán, hệ thống quản lý chất lượng (QMS)?",Bắt buộc
+7. Báo cáo & tích hợp,7.3,Có yêu cầu về phân quyền người dùng theo vai trò (RBAC) không?,"Có. Phân quyền RBAC.
+- Giám đốc
+- Phó giám đốc
+- Các phòng ban (trưởng phòng, nhân viên)","Ai xem được gì, ai làm được gì? Có cần log đầy đủ mọi thao tác (audit trail) để kiểm toán không?",Bắt buộc
+7. Báo cáo & tích hợp,7.4,Doanh nghiệp có kế hoạch mở cổng dành cho nhà cung cấp (Vendor Portal) không?,Hiện tại chưa có yêu cầu,"Nhà cung cấp xem đơn hàng, nộp hóa đơn điện tử, cập nhật thông tin giao hàng trực tiếp trên hệ thống?",Tuỳ chọn
+7. Báo cáo & tích hợp,7.5,Yêu cầu về hạ tầng triển khai: On-premise - Cloud - hay Hybrid? Có ràng buộc về bảo mật dữ liệu không?,Cloud,Số lượng người dùng đồng thời dự kiến? Yêu cầu SLA và thời gian hoạt động (uptime)? Dữ liệu có được lưu trữ ngoài Việt Nam không?,Tuỳ chọn
+7. Báo cáo & tích hợp,7.6,Timeline và ngân sách dự kiến cho dự án này là bao nhiêu?,Hoàn thành toàn bộ những yêu cầu trong 2 tháng,"Deadline go-live? Có phase triển khai ưu tiên không (MVP trước, mở rộng sau)? Ngân sách bao gồm license, triển khai, đào tạo, bảo trì?",Bắt buộc
+8. Yêu cầu về triển khai,8.1,Doanh nghiệp mong muốn sử dụng nền tảng triển khai nào?,"sử dụng Python flask hoặc django, DB - SQL Server",,Tuỳ chọn
+8. Yêu cầu về triển khai,8.2,Yêu cầu về bảo mật,"- Đăng nhập bằng email
+- Password dùng bcrypt",,Tuỳ chọn
+8. Yêu cầu về triển khai,8.3,Yêu cầu về hệ thống,"- Dễ mở rộng
+- Dễ tích hợp với các hệ thống khác về sau
+- Có thể thay đổi workflow một cách linh hoạt",,

@@ -1,0 +1,343 @@
+﻿Schema,Bảng,Mô tả bảng,Module,Use-Cases liên quan,Tên cột,Kiểu dữ liệu,Khóa / Ràng buộc,Nullable,Giá trị mặc định,Mô tả cột
+auth,Department,Bộ phận / chi nhánh trong doanh nghiệp. Mỗi user thuộc về một bộ phận.,Master Data / Auth,"UC-04, UC-05",DepartmentID,INT IDENTITY,PK,NOT NULL,,"ID bộ phận, tự tăng"
+,,,,,DepartmentCode,NVARCHAR(20),UNIQUE,NOT NULL,,"Mã bộ phận viết tắt (VD: PUR, PROD_A)"
+,,,,,DepartmentName,NVARCHAR(150),,NOT NULL,,Tên đầy đủ bộ phận
+,,,,,BranchLocation,NVARCHAR(100),,NULL,,"Chi nhánh / nhà máy (Trụ sở, Nhà máy A...)"
+,,,,,IsActive,BIT,,NOT NULL,1,Trạng thái hoạt động
+,,,,,CreatedAt,DATETIME2,,NOT NULL,SYSUTCDATETIME(),Thời điểm tạo
+,,,,,UpdatedAt,DATETIME2,,NOT NULL,SYSUTCDATETIME(),Thời điểm cập nhật
+,,,,,,,,,,
+auth,Role,Vai trò hệ thống cho RBAC. Quyết định những gì user có thể làm.,Auth,"UC-01, UC-04",RoleID,INT IDENTITY,PK,NOT NULL,,"ID vai trò, tự tăng"
+,,,,,RoleCode,NVARCHAR(50),UNIQUE,NOT NULL,,"Mã vai trò (DIRECTOR, PURCHASING_STAFF, DEPT_HEAD...)"
+,,,,,RoleName,NVARCHAR(100),,NOT NULL,,Tên vai trò hiển thị
+,,,,,Description,NVARCHAR(500),,NULL,,Mô tả quyền hạn
+,,,,,IsActive,BIT,,NOT NULL,1,Trạng thái hoạt động
+,,,,,,,,,,
+auth,Users,"Người dùng nội bộ hệ thống. Đăng nhập bằng email, mật khẩu bcrypt.",Auth,"UC-01, UC-04",UserID,INT IDENTITY,PK,NOT NULL,,"ID user, tự tăng"
+,,,,,FullName,NVARCHAR(150),,NOT NULL,,Tên đầy đủ người dùng
+,,,,,Email,NVARCHAR(200),UNIQUE,NOT NULL,,Email đăng nhập — duy nhất
+,,,,,PasswordHash,NVARCHAR(255),,NOT NULL,,Mật khẩu dạng bcrypt hash
+,,,,,DepartmentID,INT,FK → auth.Department,NOT NULL,,Bộ phận user thuộc về
+,,,,,RoleID,INT,FK → auth.Role,NOT NULL,,Vai trò RBAC của user
+,,,,,IsActive,BIT,,NOT NULL,1,Tài khoản đang hoạt động hay bị vô hiệu hóa
+,,,,,MustChangePass,BIT,,NOT NULL,1,Bắt buộc đổi mật khẩu lần đầu đăng nhập
+,,,,,LastLoginAt,DATETIME2,,NULL,,Lần đăng nhập cuối
+,,,,,CreatedAt,DATETIME2,,NOT NULL,SYSUTCDATETIME(),Thời điểm tạo tài khoản
+,,,,,UpdatedAt,DATETIME2,,NOT NULL,SYSUTCDATETIME(),Thời điểm cập nhật
+,,,,,CreatedBy,INT,FK → auth.Users,NULL,,Admin tạo tài khoản này
+,,,,,,,,,,
+auth,UserSession,Phiên đăng nhập. Dùng để quản lý session và logout. Token hết hạn theo thời gian.,Auth,UC-01,SessionID,UNIQUEIDENTIFIER,PK,NOT NULL,NEWID(),ID phiên — UUID ngẫu nhiên
+,,,,,UserID,INT,FK → auth.Users,NOT NULL,,User đang đăng nhập
+,,,,,CreatedAt,DATETIME2,,NOT NULL,SYSUTCDATETIME(),Thời điểm tạo phiên
+,,,,,ExpiresAt,DATETIME2,,NOT NULL,,Thời điểm hết hạn phiên
+,,,,,IsRevoked,BIT,,NOT NULL,0,Phiên đã bị thu hồi (logout chủ động)
+,,,,,IPAddress,NVARCHAR(50),,NULL,,Địa chỉ IP đăng nhập
+,,,,,UserAgent,NVARCHAR(500),,NULL,,Thông tin trình duyệt / thiết bị
+,,,,,,,,,,
+master_data,ItemCategory,"Nhóm danh mục vật tư (nguyên vật liệu, bao bì, vật tư tiêu hao, thiết bị, dịch vụ...).",Master Data,UC-02,CategoryID,INT IDENTITY,PK,NOT NULL,,"ID danh mục, tự tăng"
+,,,,,CategoryCode,NVARCHAR(20),UNIQUE,NOT NULL,,"Mã danh mục (RAW, PKG, CONS, EQUIP, SVC, OTHER)"
+,,,,,CategoryName,NVARCHAR(150),,NOT NULL,,Tên danh mục
+,,,,,Description,NVARCHAR(500),,NULL,,Mô tả
+,,,,,IsActive,BIT,,NOT NULL,1,Trạng thái
+,,,,,CreatedAt,DATETIME2,,NOT NULL,SYSUTCDATETIME(),Thời điểm tạo
+,,,,,UpdatedAt,DATETIME2,,NOT NULL,SYSUTCDATETIME(),Thời điểm cập nhật
+,,,,,,,,,,
+master_data,Item,Danh mục vật tư / sản phẩm master. Nền tảng để tạo PR và order.,Master Data,"UC-02, UC-05",ItemID,INT IDENTITY,PK,NOT NULL,,"ID vật tư, tự tăng"
+,,,,,ItemCode,NVARCHAR(50),UNIQUE,NOT NULL,,Mã vật tư — duy nhất trong hệ thống
+,,,,,ItemName,NVARCHAR(250),,NOT NULL,,Tên vật tư (dùng autocomplete khi tạo PR)
+,,,,,Description,NVARCHAR(1000),,NULL,,Mô tả chi tiết
+,,,,,UnitOfMeasure,NVARCHAR(50),,NOT NULL,,"Đơn vị tính: kg, chiếc, lít, bộ, m..."
+,,,,,CategoryID,INT,FK → master_data.ItemCategory,NULL,,Nhóm danh mục
+,,,,,IsActive,BIT,,NOT NULL,1,Đang hoạt động / ngừng sử dụng
+,,,,,CreatedAt,DATETIME2,,NOT NULL,SYSUTCDATETIME(),Thời điểm tạo
+,,,,,UpdatedAt,DATETIME2,,NOT NULL,SYSUTCDATETIME(),Thời điểm cập nhật
+,,,,,CreatedBy,INT,FK → auth.Users,NULL,,User tạo vật tư
+,,,,,,,,,,
+master_data,Supplier,"Danh mục nhà cung cấp. Dùng khi tạo order, gửi báo giá, quản lý hóa đơn.",Master Data,"UC-03, UC-09, UC-10",SupplierID,INT IDENTITY,PK,NOT NULL,,"ID nhà cung cấp, tự tăng"
+,,,,,SupplierCode,NVARCHAR(30),UNIQUE,NOT NULL,,Mã NCC — duy nhất
+,,,,,CompanyName,NVARCHAR(250),,NOT NULL,,Tên công ty
+,,,,,TaxCode,NVARCHAR(20),,NULL,,Mã số thuế — kiểm tra trùng khi thêm
+,,,,,Address,NVARCHAR(500),,NULL,,Địa chỉ công ty
+,,,,,ItemCategory,NVARCHAR(250),,NULL,,Nhóm hàng cung cấp (tự do nhập)
+,,,,,PaymentTermDays,INT,,NOT NULL,30,Điều khoản thanh toán mặc định (Net 30/45/60)
+,,,,,PaymentTermNote,NVARCHAR(200),,NULL,,Ghi chú điều khoản thanh toán
+,,,,,Status,NVARCHAR(20),CHECK,NOT NULL,active,active | suspended
+,,,,,CreatedAt,DATETIME2,,NOT NULL,SYSUTCDATETIME(),Thời điểm tạo
+,,,,,UpdatedAt,DATETIME2,,NOT NULL,SYSUTCDATETIME(),Thời điểm cập nhật
+,,,,,CreatedBy,INT,FK → auth.Users,NULL,,User tạo NCC
+,,,,,,,,,,
+master_data,SupplierContact,Người liên lạc của nhà cung cấp. Một NCC có thể có nhiều người liên lạc. Email dùng để gửi link báo giá.,Master Data,"UC-03, UC-10",ContactID,INT IDENTITY,PK,NOT NULL,,"ID liên lạc, tự tăng"
+,,,,,SupplierID,INT,FK → master_data.Supplier,NOT NULL,,NCC sở hữu liên lạc này
+,,,,,ContactName,NVARCHAR(150),,NOT NULL,,Tên người liên lạc
+,,,,,Email,NVARCHAR(200),,NOT NULL,,Email — dùng gửi link báo giá
+,,,,,Phone,NVARCHAR(30),,NULL,,Số điện thoại
+,,,,,Position,NVARCHAR(100),,NULL,,Chức vụ
+,,,,,IsPrimary,BIT,,NOT NULL,0,Là liên lạc chính của NCC
+,,,,,IsActive,BIT,,NOT NULL,1,Trạng thái hoạt động
+,,,,,CreatedAt,DATETIME2,,NOT NULL,SYSUTCDATETIME(),Thời điểm tạo
+,,,,,,,,,,
+pr,PurchaseRequisition,Yêu cầu mua hàng (PR). Điểm khởi đầu toàn bộ quy trình. Trưởng bộ phận tạo.,Purchase Requisition,"UC-05, UC-06",PRID,INT IDENTITY,PK,NOT NULL,,"ID PR, tự tăng"
+,,,,,PRNumber,NVARCHAR(30),UNIQUE,NOT NULL,,Số PR tự động: PR-2026-00001
+,,,,,DepartmentID,INT,FK → auth.Department,NOT NULL,,Bộ phận yêu cầu mua
+,,,,,RequestedByID,INT,FK → auth.Users,NOT NULL,,Người tạo PR (Trưởng bộ phận)
+,,,,,ItemID,INT,FK → master_data.Item,NULL,,Vật tư từ danh mục (NULL nếu free text)
+,,,,,ItemNameFreeText,NVARCHAR(250),,NULL,,Tên vật tư tự nhập (khi loại Other)
+,,,,,IsOtherItem,BIT,,NOT NULL,0,"1 = vật tư free text, 0 = từ danh mục"
+,,,,,Quantity,"DECIMAL(18,4)",,NOT NULL,,Số lượng yêu cầu
+,,,,,UnitOfMeasure,NVARCHAR(50),,NOT NULL,,Đơn vị tính
+,,,,,Priority,NVARCHAR(20),CHECK,NOT NULL,normal,normal | urgent
+,,,,,RequiredDate,DATE,,NULL,,Thời hạn cần hàng
+,,,,,Notes,NVARCHAR(1000),,NULL,,Ghi chú thêm
+,,,,,Status,NVARCHAR(30),CHECK,NOT NULL,pending,pending | in_cart | processing | received | cancelled
+,,,,,CancelReason,NVARCHAR(500),,NULL,,Lý do hủy (nếu status = cancelled)
+,,,,,CreatedAt,DATETIME2,,NOT NULL,SYSUTCDATETIME(),Thời điểm tạo PR
+,,,,,UpdatedAt,DATETIME2,,NOT NULL,SYSUTCDATETIME(),Thời điểm cập nhật
+,,,,,,,,,,
+pr,PRHistory,Lịch sử thay đổi PR. Lưu toàn bộ audit trail theo yêu cầu.,Purchase Requisition,UC-06,HistoryID,INT IDENTITY,PK,NOT NULL,,"ID lịch sử, tự tăng"
+,,,,,PRID,INT,FK → pr.PurchaseRequisition,NOT NULL,,PR được thay đổi
+,,,,,ChangedByID,INT,FK → auth.Users,NOT NULL,,Ai thay đổi
+,,,,,ChangeType,NVARCHAR(50),,NOT NULL,,Loại thay đổi: created | updated | cancelled | status_changed
+,,,,,FieldChanged,NVARCHAR(100),,NULL,,Tên trường bị thay đổi
+,,,,,OldValue,NVARCHAR(MAX),,NULL,,Giá trị cũ
+,,,,,NewValue,NVARCHAR(MAX),,NULL,,Giá trị mới
+,,,,,Note,NVARCHAR(500),,NULL,,Ghi chú bổ sung
+,,,,,ChangedAt,DATETIME2,,NOT NULL,SYSUTCDATETIME(),Thời điểm thay đổi
+,,,,,,,,,,
+cart,Cart,Giỏ hàng. Phòng mua hàng gom nhiều PR vào cart. Có thể có nhiều cart mở cùng lúc.,Cart & Order,"UC-07, UC-08",CartID,INT IDENTITY,PK,NOT NULL,,"ID cart, tự tăng"
+,,,,,CartTitle,NVARCHAR(200),,NOT NULL,,Tiêu đề cart để phân biệt (VD: Mua tháng 3 - NVL)
+,,,,,CreatedByID,INT,FK → auth.Users,NOT NULL,,Nhân viên mua hàng tạo cart
+,,,,,Status,NVARCHAR(20),CHECK,NOT NULL,open,open | converted | closed
+,,,,,Notes,NVARCHAR(500),,NULL,,Ghi chú
+,,,,,CreatedAt,DATETIME2,,NOT NULL,SYSUTCDATETIME(),Thời điểm tạo
+,,,,,UpdatedAt,DATETIME2,,NOT NULL,SYSUTCDATETIME(),Thời điểm cập nhật
+,,,,,,,,,,
+cart,CartItem,"Quan hệ Cart - PR (N:N). Lưu thông tin PR được đưa vào cart, bao gồm cả ghi đè số lượng/tên.",Cart & Order,"UC-07, UC-08",CartItemID,INT IDENTITY,PK,NOT NULL,,"ID, tự tăng"
+,,,,,CartID,INT,FK → cart.Cart,NOT NULL,,Cart chứa PR
+,,,,,PRID,INT,FK → pr.PurchaseRequisition,NOT NULL,,PR được thêm vào cart
+,,,,,QuantityOverride,"DECIMAL(18,4)",,NULL,,Số lượng ghi đè bởi phòng mua hàng (NULL = dùng SL gốc từ PR)
+,,,,,ItemNameOverride,NVARCHAR(250),,NULL,,Tên vật tư ghi đè (NULL = dùng tên gốc)
+,,,,,AddedByID,INT,FK → auth.Users,NOT NULL,,Người thêm PR vào cart
+,,,,,AddedAt,DATETIME2,,NOT NULL,SYSUTCDATETIME(),Thời điểm thêm
+,,,,,RemovedAt,DATETIME2,,NULL,,Thời điểm xóa khỏi cart (NULL = còn trong cart)
+,,,,,RemovedByID,INT,FK → auth.Users,NULL,,Người xóa khỏi cart
+,,,,,,,,,,
+cart,CartHistory,Lịch sử thay đổi Cart. Dùng để notify người tạo PR khi có thay đổi.,Cart & Order,UC-08,HistoryID,INT IDENTITY,PK,NOT NULL,,"ID lịch sử, tự tăng"
+,,,,,CartID,INT,FK → cart.Cart,NOT NULL,,Cart bị thay đổi
+,,,,,ChangedByID,INT,FK → auth.Users,NOT NULL,,Ai thay đổi
+,,,,,ChangeType,NVARCHAR(50),,NOT NULL,,item_added | item_removed | item_modified
+,,,,,PRID,INT,FK → pr.PurchaseRequisition,NULL,,PR liên quan đến thay đổi
+,,,,,OldValue,NVARCHAR(MAX),,NULL,,Giá trị cũ (JSON)
+,,,,,NewValue,NVARCHAR(MAX),,NULL,,Giá trị mới (JSON)
+,,,,,ChangedAt,DATETIME2,,NOT NULL,SYSUTCDATETIME(),Thời điểm thay đổi
+,,,,,,,,,,
+cart,PurchaseOrder,"Đơn mua hàng. Được tạo từ cart, liên kết với nhiều NCC và dòng hàng.",Cart & Order,"UC-09, UC-15",OrderID,INT IDENTITY,PK,NOT NULL,,"ID order, tự tăng"
+,,,,,OrderNumber,NVARCHAR(30),UNIQUE,NOT NULL,,Số order tự động: PO-2026-00001
+,,,,,CartID,INT,FK → cart.Cart,NOT NULL,,Cart nguồn tạo ra order
+,,,,,CreatedByID,INT,FK → auth.Users,NOT NULL,,Nhân viên mua hàng tạo order
+,,,,,Status,NVARCHAR(30),CHECK,NOT NULL,draft,draft | quotation_sent | quotation_received | ipo_draft | ipo_pending | ipo_approved | ipo_rejected | in_progress | delivered | partial_delivered | cancelled
+,,,,,Notes,NVARCHAR(1000),,NULL,,Ghi chú
+,,,,,CreatedAt,DATETIME2,,NOT NULL,SYSUTCDATETIME(),Thời điểm tạo
+,,,,,UpdatedAt,DATETIME2,,NOT NULL,SYSUTCDATETIME(),Thời điểm cập nhật
+,,,,,,,,,,
+cart,OrderLine,"Dòng hàng trong order. Mỗi dòng là một loại vật tư, tổng hợp SL từ nhiều PR.",Cart & Order,UC-09,OrderLineID,INT IDENTITY,PK,NOT NULL,,"ID dòng hàng, tự tăng"
+,,,,,OrderID,INT,FK → cart.PurchaseOrder,NOT NULL,,Order chứa dòng này
+,,,,,ItemID,INT,FK → master_data.Item,NULL,,Vật tư từ danh mục (NULL nếu free text)
+,,,,,ItemNameDisplay,NVARCHAR(250),,NOT NULL,,Tên hiển thị trên order (từ item hoặc free text)
+,,,,,UnitOfMeasure,NVARCHAR(50),,NOT NULL,,Đơn vị tính
+,,,,,TotalQuantity,"DECIMAL(18,4)",,NOT NULL,,Tổng SL = sum của các PR trong cart có cùng item
+,,,,,Notes,NVARCHAR(500),,NULL,,Ghi chú dòng hàng
+,,,,,CreatedAt,DATETIME2,,NOT NULL,SYSUTCDATETIME(),Thời điểm tạo
+,,,,,,,,,,
+cart,OrderLinePR,Mapping OrderLine ↔ PR. Truy vết từng PR đóng góp vào dòng hàng nào trong order.,Cart & Order,UC-09,OrderLinePRID,INT IDENTITY,PK,NOT NULL,,"ID, tự tăng"
+,,,,,OrderLineID,INT,FK → cart.OrderLine,NOT NULL,,Dòng hàng order
+,,,,,PRID,INT,FK → pr.PurchaseRequisition,NOT NULL,,PR đóng góp vào dòng hàng này
+,,,,,Quantity,"DECIMAL(18,4)",,NOT NULL,,SL từ PR này đóng góp vào dòng hàng
+,,,,,,,,,,
+cart,OrderSupplier,NCC được chọn cho Order. Một order gửi báo giá đến nhiều NCC.,Cart & Order,"UC-09, UC-10",OrderSupplierID,INT IDENTITY,PK,NOT NULL,,"ID, tự tăng"
+,,,,,OrderID,INT,FK → cart.PurchaseOrder,NOT NULL,,Order liên quan
+,,,,,SupplierID,INT,FK → master_data.Supplier,NOT NULL,,NCC được chọn
+,,,,,ContactOverrideName,NVARCHAR(150),,NULL,,Ghi đè tên liên lạc cho order này
+,,,,,ContactOverrideEmail,NVARCHAR(200),,NULL,,Ghi đè email liên lạc cho order này
+,,,,,AddedByID,INT,FK → auth.Users,NOT NULL,,Người thêm NCC vào order
+,,,,,AddedAt,DATETIME2,,NOT NULL,SYSUTCDATETIME(),Thời điểm thêm
+,,,,,,,,,,
+cart,OrderStatusHistory,Lịch sử cập nhật trạng thái order. Theo dõi tiến độ giao hàng.,Cart & Order,UC-15,HistoryID,INT IDENTITY,PK,NOT NULL,,"ID, tự tăng"
+,,,,,OrderID,INT,FK → cart.PurchaseOrder,NOT NULL,,Order được cập nhật
+,,,,,OldStatus,NVARCHAR(30),,NULL,,Trạng thái cũ
+,,,,,NewStatus,NVARCHAR(30),,NOT NULL,,Trạng thái mới
+,,,,,ChangedByID,INT,FK → auth.Users,NOT NULL,,Người cập nhật
+,,,,,Note,NVARCHAR(500),,NULL,,Ghi chú khi cập nhật trạng thái
+,,,,,ChangedAt,DATETIME2,,NOT NULL,SYSUTCDATETIME(),Thời điểm cập nhật
+,,,,,,,,,,
+quot,QuotationSession,Phiên báo giá. Mỗi NCC trong order nhận một phiên với token bảo mật riêng để nhập giá.,Quotation,"UC-10, UC-11",SessionID,INT IDENTITY,PK,NOT NULL,,"ID phiên, tự tăng"
+,,,,,OrderID,INT,FK → cart.PurchaseOrder,NOT NULL,,Order cần báo giá
+,,,,,OrderSupplierID,INT,FK → cart.OrderSupplier,NOT NULL,,NCC nhận phiên báo giá
+,,,,,QuotationToken,NVARCHAR(500),UNIQUE,NOT NULL,,Token bảo mật trong link — UUID/hash
+,,,,,TokenExpiry,DATETIME2,,NOT NULL,,Deadline nhập báo giá — sau deadline không cho edit
+,,,,,EmailSentAt,DATETIME2,,NULL,,Thời điểm gửi email
+,,,,,EmailSentByID,INT,FK → auth.Users,NULL,,Nhân viên mua hàng gửi email
+,,,,,Status,NVARCHAR(20),CHECK,NOT NULL,pending,pending | submitted | expired | closed
+,,,,,CreatedAt,DATETIME2,,NOT NULL,SYSUTCDATETIME(),Thời điểm tạo
+,,,,,,,,,,
+quot,QuotationLine,"Báo giá chi tiết theo từng dòng hàng. NCC điền đơn giá, tổng tiền cho từng vật tư.",Quotation,"UC-11, UC-12",QuotationLineID,INT IDENTITY,PK,NOT NULL,,"ID dòng báo giá, tự tăng"
+,,,,,SessionID,INT,FK → quot.QuotationSession,NOT NULL,,Phiên báo giá
+,,,,,OrderLineID,INT,FK → cart.OrderLine,NOT NULL,,Dòng hàng order cần báo giá
+,,,,,UnitPrice,"DECIMAL(18,4)",,NULL,,Đơn giá NCC báo
+,,,,,TotalPrice,"DECIMAL(18,4)",,NULL,,Tổng tiền = UnitPrice × Quantity
+,,,,,Currency,NVARCHAR(10),,NOT NULL,VND,Đơn vị tiền tệ
+,,,,,DeliveryDays,INT,,NULL,,Thời gian giao hàng (ngày)
+,,,,,Notes,NVARCHAR(500),,NULL,,Ghi chú của NCC
+,,,,,SubmittedAt,DATETIME2,,NULL,,Thời điểm NCC submit báo giá
+,,,,,IsSelected,BIT,,NOT NULL,0,1 = được phòng mua hàng chốt chọn
+,,,,,,,,,,
+quot,QuotationSubmitHistory,Lịch sử submit báo giá. NCC có thể submit nhiều lần trước deadline — giữ lịch sử.,Quotation,UC-11,SubmitID,INT IDENTITY,PK,NOT NULL,,"ID lần submit, tự tăng"
+,,,,,SessionID,INT,FK → quot.QuotationSession,NOT NULL,,Phiên báo giá
+,,,,,SubmittedAt,DATETIME2,,NOT NULL,SYSUTCDATETIME(),Thời điểm submit
+,,,,,SubmitMethod,NVARCHAR(20),CHECK,NOT NULL,form,form | excel_upload
+,,,,,IPAddress,NVARCHAR(50),,NULL,,IP của NCC khi submit
+,,,,,Notes,NVARCHAR(500),,NULL,,Ghi chú lần submit
+,,,,,,,,,,
+ipo,IPO,Internal Purchase Order. Được tạo sau khi chốt giá. Xuất PDF → ký → upload. Giám đốc phê duyệt.,IPO Approval,"UC-12, UC-13, UC-14",IPOID,INT IDENTITY,PK,NOT NULL,,"ID IPO, tự tăng"
+,,,,,IPONumber,NVARCHAR(30),UNIQUE,NOT NULL,,Số IPO tự động: IPO-2026-00001
+,,,,,OrderID,INT,FK → cart.PurchaseOrder,NOT NULL,,Order nguồn tạo IPO
+,,,,,CreatedByID,INT,FK → auth.Users,NOT NULL,,Nhân viên mua hàng tạo IPO
+,,,,,TotalAmount,"DECIMAL(18,4)",,NOT NULL,0,Tổng giá trị IPO
+,,,,,Currency,NVARCHAR(10),,NOT NULL,VND,Đơn vị tiền tệ
+,,,,,Status,NVARCHAR(30),CHECK,NOT NULL,draft,draft | pending_approval | approved | rejected | in_progress | completed
+,,,,,PDFFilePath,NVARCHAR(1000),,NULL,,Đường dẫn file PDF IPO đã ký và upload
+,,,,,SubmittedAt,DATETIME2,,NULL,,Thời điểm submit để duyệt
+,,,,,ApprovedAt,DATETIME2,,NULL,,Thời điểm được duyệt
+,,,,,ApprovedByID,INT,FK → auth.Users,NULL,,Giám đốc / Phó GĐ phê duyệt
+,,,,,RejectedAt,DATETIME2,,NULL,,Thời điểm bị từ chối
+,,,,,RejectedByID,INT,FK → auth.Users,NULL,,Giám đốc / Phó GĐ từ chối
+,,,,,RejectionReason,NVARCHAR(1000),,NULL,,Lý do từ chối
+,,,,,Notes,NVARCHAR(1000),,NULL,,Ghi chú
+,,,,,CreatedAt,DATETIME2,,NOT NULL,SYSUTCDATETIME(),Thời điểm tạo IPO
+,,,,,UpdatedAt,DATETIME2,,NOT NULL,SYSUTCDATETIME(),Thời điểm cập nhật
+,,,,,,,,,,
+ipo,IPOLine,Dòng hàng trong IPO. Mỗi dòng = 1 vật tư + 1 NCC được chốt + giá đã xác nhận.,IPO Approval,UC-12,IPOLineID,INT IDENTITY,PK,NOT NULL,,"ID dòng IPO, tự tăng"
+,,,,,IPOID,INT,FK → ipo.IPO,NOT NULL,,IPO chứa dòng này
+,,,,,OrderLineID,INT,FK → cart.OrderLine,NOT NULL,,Dòng hàng order
+,,,,,SupplierID,INT,FK → master_data.Supplier,NOT NULL,,NCC được chốt cho dòng này
+,,,,,QuotationLineID,INT,FK → quot.QuotationLine,NULL,,Dòng báo giá gốc (để truy vết)
+,,,,,ItemNameDisplay,NVARCHAR(250),,NOT NULL,,Tên vật tư hiển thị trên IPO
+,,,,,UnitOfMeasure,NVARCHAR(50),,NOT NULL,,Đơn vị tính
+,,,,,Quantity,"DECIMAL(18,4)",,NOT NULL,,Số lượng mua
+,,,,,UnitPrice,"DECIMAL(18,4)",,NOT NULL,,Đơn giá đã chốt
+,,,,,TotalPrice,"DECIMAL(18,4)",,NOT NULL,,Tổng tiền dòng này
+,,,,,Currency,NVARCHAR(10),,NOT NULL,VND,Đơn vị tiền tệ
+,,,,,PaymentTermDays,INT,,NOT NULL,30,Điều khoản thanh toán (ngày)
+,,,,,DeliveryDays,INT,,NULL,,Thời gian giao hàng
+,,,,,Notes,NVARCHAR(500),,NULL,,Ghi chú
+,,,,,,,,,,
+ipo,IPOHistory,Lịch sử thay đổi IPO. Audit trail đầy đủ theo yêu cầu.,IPO Approval,"UC-12, UC-13",HistoryID,INT IDENTITY,PK,NOT NULL,,"ID, tự tăng"
+,,,,,IPOID,INT,FK → ipo.IPO,NOT NULL,,IPO được thay đổi
+,,,,,ChangedByID,INT,FK → auth.Users,NOT NULL,,Ai thay đổi
+,,,,,ChangeType,NVARCHAR(50),,NOT NULL,,created | updated | submitted | approved | rejected | status_changed
+,,,,,OldStatus,NVARCHAR(30),,NULL,,Trạng thái cũ
+,,,,,NewStatus,NVARCHAR(30),,NULL,,Trạng thái mới
+,,,,,FieldChanged,NVARCHAR(100),,NULL,,Tên trường bị thay đổi
+,,,,,OldValue,NVARCHAR(MAX),,NULL,,Giá trị cũ
+,,,,,NewValue,NVARCHAR(MAX),,NULL,,Giá trị mới
+,,,,,Note,NVARCHAR(500),,NULL,,Ghi chú
+,,,,,ChangedAt,DATETIME2,,NOT NULL,SYSUTCDATETIME(),Thời điểm thay đổi
+,,,,,,,,,,
+wh,GoodsReceipt,Phiếu nhập kho. Thủ kho tạo khi nhận hàng từ NCC theo order đã duyệt.,Warehouse,UC-16,ReceiptID,INT IDENTITY,PK,NOT NULL,,"ID phiếu nhập kho, tự tăng"
+,,,,,ReceiptNumber,NVARCHAR(30),UNIQUE,NOT NULL,,Số phiếu tự động: GR-2026-00001
+,,,,,OrderID,INT,FK → cart.PurchaseOrder,NOT NULL,,Order nhận hàng theo
+,,,,,ReceivedByID,INT,FK → auth.Users,NOT NULL,,Thủ kho nhận hàng
+,,,,,ReceiptDate,DATE,,NOT NULL,SYSUTCDATETIME(),Ngày nhận hàng thực tế
+,,,,,Status,NVARCHAR(20),CHECK,NOT NULL,partial,partial | complete
+,,,,,Notes,NVARCHAR(1000),,NULL,,Ghi chú nhập kho
+,,,,,CreatedAt,DATETIME2,,NOT NULL,SYSUTCDATETIME(),Thời điểm tạo phiếu
+,,,,,,,,,,
+wh,GoodsReceiptLine,Dòng hàng nhập kho. Chi tiết SL thực nhận theo từng vật tư trong phiếu.,Warehouse,UC-16,ReceiptLineID,INT IDENTITY,PK,NOT NULL,,"ID dòng, tự tăng"
+,,,,,ReceiptID,INT,FK → wh.GoodsReceipt,NOT NULL,,Phiếu nhập kho
+,,,,,OrderLineID,INT,FK → cart.OrderLine,NOT NULL,,Dòng hàng order
+,,,,,PRID,INT,FK → pr.PurchaseRequisition,NULL,,PR của bộ phận nhận hàng
+,,,,,QuantityOrdered,"DECIMAL(18,4)",,NOT NULL,,SL đặt theo order
+,,,,,QuantityReceived,"DECIMAL(18,4)",,NOT NULL,,SL thực nhận từ NCC
+,,,,,QuantityDiff,"DECIMAL(18,4)",Computed,,AS (Ordered-Received),Chênh lệch tự tính
+,,,,,UnitOfMeasure,NVARCHAR(50),,NOT NULL,,Đơn vị tính
+,,,,,DiffNote,NVARCHAR(500),,NULL,,Ghi chú nếu có sai lệch
+,,,,,CreatedAt,DATETIME2,,NOT NULL,SYSUTCDATETIME(),Thời điểm tạo
+,,,,,,,,,,
+wh,DepartmentConfirmation,Xác nhận nhận hàng từ trưởng bộ phận. Đóng PR sau khi đã nhận đủ.,Warehouse,UC-17,ConfirmID,INT IDENTITY,PK,NOT NULL,,"ID, tự tăng"
+,,,,,ReceiptLineID,INT,FK → wh.GoodsReceiptLine,NOT NULL,,Dòng nhập kho được xác nhận
+,,,,,PRID,INT,FK → pr.PurchaseRequisition,NOT NULL,,PR được đóng
+,,,,,ConfirmedByID,INT,FK → auth.Users,NOT NULL,,Trưởng bộ phận xác nhận
+,,,,,ConfirmedAt,DATETIME2,,NOT NULL,SYSUTCDATETIME(),Thời điểm xác nhận
+,,,,,QualityNote,NVARCHAR(500),,NULL,,Đánh giá chất lượng hàng nhận (tùy chọn)
+,,,,,IsConfirmed,BIT,,NOT NULL,1,1 = đã xác nhận nhận hàng
+,,,,,,,,,,
+fin,Invoice,Hóa đơn từ nhà cung cấp. Liên kết với order. Một order có thể có nhiều hóa đơn.,Invoice & Payment,UC-18,InvoiceID,INT IDENTITY,PK,NOT NULL,,"ID hóa đơn, tự tăng"
+,,,,,InvoiceNumber,NVARCHAR(50),,NOT NULL,,Số hóa đơn từ NCC
+,,,,,OrderID,INT,FK → cart.PurchaseOrder,NOT NULL,,Order liên kết
+,,,,,SupplierID,INT,FK → master_data.Supplier,NOT NULL,,NCC xuất hóa đơn
+,,,,,InvoiceDate,DATE,,NOT NULL,,Ngày hóa đơn
+,,,,,TotalAmount,"DECIMAL(18,4)",,NOT NULL,,Tổng tiền hóa đơn
+,,,,,Currency,NVARCHAR(10),,NOT NULL,VND,Đơn vị tiền tệ
+,,,,,PDFFilePath,NVARCHAR(1000),,NULL,,Đường dẫn file PDF hóa đơn upload
+,,,,,PDFFileURL,NVARCHAR(1000),,NULL,,URL hóa đơn điện tử (thay thế file upload)
+,,,,,Status,NVARCHAR(30),CHECK,NOT NULL,pending,pending | payment_requested | paid | credit_noted
+,,,,,Notes,NVARCHAR(1000),,NULL,,Ghi chú
+,,,,,UploadedByID,INT,FK → auth.Users,NOT NULL,,Nhân viên mua hàng upload hóa đơn
+,,,,,UploadedAt,DATETIME2,,NOT NULL,SYSUTCDATETIME(),Thời điểm upload
+,,,,,,,,,,
+fin,PaymentRequest,Yêu cầu thanh toán. Nhân viên mua hàng tạo khi hóa đơn và IPO đã đủ điều kiện.,Invoice & Payment,UC-19,PaymentRequestID,INT IDENTITY,PK,NOT NULL,,"ID yêu cầu thanh toán, tự tăng"
+,,,,,RequestNumber,NVARCHAR(30),UNIQUE,NOT NULL,,Số yêu cầu: PAYREQ-2026-00001
+,,,,,InvoiceID,INT,FK → fin.Invoice,NOT NULL,,Hóa đơn cần thanh toán
+,,,,,IPOID,INT,FK → ipo.IPO,NOT NULL,,IPO đã được duyệt
+,,,,,RequestedByID,INT,FK → auth.Users,NOT NULL,,Nhân viên mua hàng tạo yêu cầu
+,,,,,Amount,"DECIMAL(18,4)",,NOT NULL,,Số tiền cần thanh toán
+,,,,,Currency,NVARCHAR(10),,NOT NULL,VND,Đơn vị tiền tệ
+,,,,,DueDate,DATE,,NOT NULL,,Hạn thanh toán
+,,,,,PaymentMethod,NVARCHAR(50),,NULL,,"Phương thức: chuyển khoản, tiền mặt..."
+,,,,,Status,NVARCHAR(20),CHECK,NOT NULL,pending,pending | processing | paid | cancelled
+,,,,,Notes,NVARCHAR(1000),,NULL,,Ghi chú
+,,,,,CreatedAt,DATETIME2,,NOT NULL,SYSUTCDATETIME(),Thời điểm tạo
+,,,,,UpdatedAt,DATETIME2,,NOT NULL,SYSUTCDATETIME(),Thời điểm cập nhật
+,,,,,,,,,,
+fin,Payment,Thanh toán thực tế. Kế toán ghi nhận sau khi chuyển tiền. Số tham chiếu giao dịch.,Invoice & Payment,UC-20,PaymentID,INT IDENTITY,PK,NOT NULL,,"ID thanh toán, tự tăng"
+,,,,,PaymentRequestID,INT,FK → fin.PaymentRequest,NOT NULL,,Yêu cầu thanh toán
+,,,,,PaidByID,INT,FK → auth.Users,NOT NULL,,Kế toán thực hiện thanh toán
+,,,,,PaidAt,DATETIME2,,NOT NULL,SYSUTCDATETIME(),Thời điểm ghi nhận
+,,,,,PaymentDate,DATE,,NOT NULL,,Ngày thanh toán thực tế
+,,,,,TransactionRef,NVARCHAR(100),,NOT NULL,,Số tham chiếu giao dịch ngân hàng
+,,,,,AmountPaid,"DECIMAL(18,4)",,NOT NULL,,Số tiền thực tế thanh toán
+,,,,,Currency,NVARCHAR(10),,NOT NULL,VND,Đơn vị tiền tệ
+,,,,,Notes,NVARCHAR(1000),,NULL,,Ghi chú kế toán
+,,,,,,,,,,
+fin,CreditNote,Phiếu ghi có / hoàn tiền khi trả hàng. Liên kết với hóa đơn gốc.,Invoice & Payment,UC-20,CreditNoteID,INT IDENTITY,PK,NOT NULL,,"ID, tự tăng"
+,,,,,CreditNoteNumber,NVARCHAR(50),UNIQUE,NOT NULL,,Số credit note
+,,,,,InvoiceID,INT,FK → fin.Invoice,NOT NULL,,Hóa đơn gốc bị hoàn
+,,,,,SupplierID,INT,FK → master_data.Supplier,NOT NULL,,NCC liên quan
+,,,,,Amount,"DECIMAL(18,4)",,NOT NULL,,Số tiền hoàn
+,,,,,Currency,NVARCHAR(10),,NOT NULL,VND,Đơn vị tiền tệ
+,,,,,Reason,NVARCHAR(500),,NOT NULL,,Lý do hoàn tiền / trả hàng
+,,,,,IssuedDate,DATE,,NOT NULL,,Ngày phát hành credit note
+,,,,,CreatedByID,INT,FK → auth.Users,NOT NULL,,Kế toán tạo
+,,,,,CreatedAt,DATETIME2,,NOT NULL,SYSUTCDATETIME(),Thời điểm tạo
+,,,,,,,,,,
+dbo,Notification,Thông báo in-app và email. Ghi nhận mọi sự kiện cần notify theo Use-Case.,Notification,Tất cả UC có notify,NotificationID,INT IDENTITY,PK,NOT NULL,,"ID thông báo, tự tăng"
+,,,,,RecipientUserID,INT,FK → auth.Users,NOT NULL,,Người nhận thông báo
+,,,,,EventType,NVARCHAR(100),,NOT NULL,,Loại sự kiện: pr_created | quotation_submitted | ipo_pending_approval | ipo_approved | ipo_rejected | goods_received | payment_request_created...
+,,,,,Title,NVARCHAR(200),,NOT NULL,,Tiêu đề thông báo
+,,,,,Message,NVARCHAR(2000),,NULL,,Nội dung chi tiết
+,,,,,EntityType,NVARCHAR(50),,NULL,,Đối tượng liên quan: PR | Order | IPO | Invoice
+,,,,,EntityID,INT,,NULL,,ID đối tượng liên quan
+,,,,,IsRead,BIT,,NOT NULL,0,Đã đọc chưa
+,,,,,IsEmailSent,BIT,,NOT NULL,0,Email đã gửi chưa
+,,,,,EmailSentAt,DATETIME2,,NULL,,Thời điểm gửi email
+,,,,,CreatedAt,DATETIME2,,NOT NULL,SYSUTCDATETIME(),Thời điểm tạo thông báo
+,,,,,,,,,,
+audit,AuditLog,"Nhật ký hệ thống. Ghi lại mọi thao tác quan trọng: đăng nhập, sửa, xóa, phê duyệt.",Audit,Tất cả UC,AuditID,BIGINT IDENTITY,PK,NOT NULL,,"ID log, tự tăng (BIGINT cho volume lớn)"
+,,,,,UserID,INT,FK → auth.Users,NULL,,User thực hiện (NULL nếu hành động hệ thống)
+,,,,,Action,NVARCHAR(100),,NOT NULL,,Hành động: INSERT | UPDATE | DELETE | LOGIN | LOGOUT | APPROVE | REJECT
+,,,,,TableName,NVARCHAR(100),,NULL,,Tên bảng bị tác động
+,,,,,RecordID,INT,,NULL,,ID bản ghi bị tác động
+,,,,,OldData,NVARCHAR(MAX),,NULL,,JSON snapshot trước khi thay đổi
+,,,,,NewData,NVARCHAR(MAX),,NULL,,JSON snapshot sau khi thay đổi
+,,,,,IPAddress,NVARCHAR(50),,NULL,,Địa chỉ IP
+,,,,,ActionAt,DATETIME2,,NOT NULL,SYSUTCDATETIME(),Thời điểm thực hiện
+,,,,,,,,,,

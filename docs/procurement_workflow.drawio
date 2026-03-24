@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net" modified="2026-03-23T00:00:00.000Z" agent="Claude" version="21.0.0">
+  <diagram id="procurement-workflow" name="Quy trình mua hàng">
+    <mxGraphModel dx="1422" dy="762" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1654" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+
+        <!-- ===== SWIMLANE CONTAINER ===== -->
+        <mxCell id="swim-main" value="Quy trình mua hàng — Hệ thống Mua hàng Sản xuất" style="shape=pool;startSize=30;horizontal=1;childLayout=stackLayout;horizontalStack=0;resizeParent=1;resizeParentMax=0;collapsible=0;marginBottom=0;swimlaneHead=0;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=14;fontStyle=1;fontColor=#1a1a1a;" vertex="1" parent="1">
+          <mxGeometry x="40" y="40" width="1560" height="1020" as="geometry"/>
+        </mxCell>
+
+        <!-- ===== LANE 1: Trưởng bộ phận ===== -->
+        <mxCell id="lane1" value="Trưởng bộ phận" style="swimlane;startSize=30;horizontal=0;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=12;fontStyle=1;swimlaneHead=0;" vertex="1" parent="swim-main">
+          <mxGeometry y="30" width="1560" height="150" as="geometry"/>
+        </mxCell>
+
+        <!-- Step 1: Tạo PR -->
+        <mxCell id="s1" value="&lt;b&gt;1. Tạo yêu cầu mua hàng&lt;/b&gt;&lt;br&gt;Chọn vật tư, SL, ưu tiên, deadline" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;arcSize=12;" vertex="1" parent="lane1">
+          <mxGeometry x="60" y="50" width="200" height="60" as="geometry"/>
+        </mxCell>
+
+        <!-- Step 2: Chỉnh sửa / hủy PR -->
+        <mxCell id="s2" value="&lt;b&gt;2. Chỉnh sửa / Hủy PR&lt;/b&gt;&lt;br&gt;Lịch sử thay đổi · Notify mua hàng" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;arcSize=12;" vertex="1" parent="lane1">
+          <mxGeometry x="320" y="50" width="200" height="60" as="geometry"/>
+        </mxCell>
+
+        <!-- Step 13: Xác nhận nhận hàng -->
+        <mxCell id="s13" value="&lt;b&gt;13. Xác nhận nhận hàng&lt;/b&gt;&lt;br&gt;Confirm đã nhận · Đóng request" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;arcSize=12;" vertex="1" parent="lane1">
+          <mxGeometry x="1260" y="50" width="200" height="60" as="geometry"/>
+        </mxCell>
+
+        <!-- ===== LANE 2: Phòng mua hàng ===== -->
+        <mxCell id="lane2" value="Phòng mua hàng" style="swimlane;startSize=30;horizontal=0;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12;fontStyle=1;swimlaneHead=0;" vertex="1" parent="swim-main">
+          <mxGeometry y="180" width="1560" height="270" as="geometry"/>
+        </mxCell>
+
+        <!-- Step 3: Tạo cart -->
+        <mxCell id="s3" value="&lt;b&gt;3. Tạo giỏ hàng (Cart)&lt;/b&gt;&lt;br&gt;Lọc PR, multi-select, đặt title" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;arcSize=12;" vertex="1" parent="lane2">
+          <mxGeometry x="60" y="50" width="200" height="60" as="geometry"/>
+        </mxCell>
+
+        <!-- Step 4: Chỉnh sửa cart -->
+        <mxCell id="s4" value="&lt;b&gt;4. Chỉnh sửa cart&lt;/b&gt;&lt;br&gt;Thêm/bớt PR, sửa SL, notify bộ phận" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;arcSize=12;" vertex="1" parent="lane2">
+          <mxGeometry x="320" y="50" width="200" height="60" as="geometry"/>
+        </mxCell>
+
+        <!-- Step 5: Tạo order -->
+        <mxCell id="s5" value="&lt;b&gt;5. Tạo order&lt;/b&gt;&lt;br&gt;Tổng hợp SL theo vật tư · Chọn NCC" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;arcSize=12;" vertex="1" parent="lane2">
+          <mxGeometry x="580" y="50" width="200" height="60" as="geometry"/>
+        </mxCell>
+
+        <!-- Step 6: Chỉnh sửa order -->
+        <mxCell id="s6" value="&lt;b&gt;6. Chỉnh sửa order&lt;/b&gt;&lt;br&gt;Thêm NCC, sửa liên lạc" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;arcSize=12;" vertex="1" parent="lane2">
+          <mxGeometry x="580" y="170" width="200" height="60" as="geometry"/>
+        </mxCell>
+
+        <!-- Step 7: Gửi yêu cầu báo giá -->
+        <mxCell id="s7" value="&lt;b&gt;7. Gửi yêu cầu báo giá&lt;/b&gt;&lt;br&gt;Email template · Link riêng từng NCC" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;arcSize=12;" vertex="1" parent="lane2">
+          <mxGeometry x="840" y="50" width="200" height="60" as="geometry"/>
+        </mxCell>
+
+        <!-- Step 9: Confirm giá / Xuất IPO -->
+        <mxCell id="s9" value="&lt;b&gt;9. Confirm giá / Xuất IPO&lt;/b&gt;&lt;br&gt;Chốt từng item · Xuất PDF để ký" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;arcSize=12;" vertex="1" parent="lane2">
+          <mxGeometry x="1100" y="50" width="200" height="60" as="geometry"/>
+        </mxCell>
+
+        <!-- Step 14: Nhập hóa đơn -->
+        <mxCell id="s14" value="&lt;b&gt;14. Nhập hóa đơn&lt;/b&gt;&lt;br&gt;Upload PDF / link URL" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;arcSize=12;" vertex="1" parent="lane2">
+          <mxGeometry x="1260" y="170" width="200" height="60" as="geometry"/>
+        </mxCell>
+
+        <!-- Step 16: Yêu cầu thanh toán -->
+        <mxCell id="s16" value="&lt;b&gt;16. Yêu cầu thanh toán&lt;/b&gt;&lt;br&gt;Khi HĐ và IPO đã ok" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;arcSize=12;" vertex="1" parent="lane2">
+          <mxGeometry x="1380" y="50" width="160" height="60" as="geometry"/>
+        </mxCell>
+
+        <!-- Step 15: Chỉnh sửa IPO -->
+        <mxCell id="s15" value="&lt;b&gt;15. Chỉnh sửa IPO&lt;/b&gt;&lt;br&gt;Update, print, ký, upload PDF" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;arcSize=12;" vertex="1" parent="lane2">
+          <mxGeometry x="1100" y="170" width="200" height="60" as="geometry"/>
+        </mxCell>
+
+        <!-- ===== LANE 3: Nhà cung cấp ===== -->
+        <mxCell id="lane3" value="Nhà cung cấp" style="swimlane;startSize=30;horizontal=0;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=12;fontStyle=1;swimlaneHead=0;" vertex="1" parent="swim-main">
+          <mxGeometry y="450" width="1560" height="130" as="geometry"/>
+        </mxCell>
+
+        <!-- Step 8: Nhập báo giá -->
+        <mxCell id="s8" value="&lt;b&gt;8. Nhập báo giá&lt;/b&gt;&lt;br&gt;Form web hoặc upload Excel&lt;br&gt;Cho phép edit trước deadline" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;arcSize=12;" vertex="1" parent="lane3">
+          <mxGeometry x="840" y="35" width="200" height="70" as="geometry"/>
+        </mxCell>
+
+        <!-- ===== LANE 4: Giám đốc ===== -->
+        <mxCell id="lane4" value="Giám đốc" style="swimlane;startSize=30;horizontal=0;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=12;fontStyle=1;swimlaneHead=0;" vertex="1" parent="swim-main">
+          <mxGeometry y="580" width="1560" height="150" as="geometry"/>
+        </mxCell>
+
+        <!-- Step 10: Decision - Duyệt IPO -->
+        <mxCell id="s10d" value="Duyệt IPO?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=12;fontStyle=1;" vertex="1" parent="lane4">
+          <mxGeometry x="1100" y="40" width="120" height="80" as="geometry"/>
+        </mxCell>
+
+        <!-- Step 10 approved -->
+        <mxCell id="s10ok" value="&lt;b&gt;Đã duyệt&lt;/b&gt;&lt;br&gt;Gửi order chính thức cho NCC" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;arcSize=12;" vertex="1" parent="lane4">
+          <mxGeometry x="1300" y="55" width="180" height="55" as="geometry"/>
+        </mxCell>
+
+        <!-- Step 10 rejected -->
+        <mxCell id="s10no" value="&lt;b&gt;Từ chối&lt;/b&gt;&lt;br&gt;Ghi lý do · Notify mua hàng" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=11;arcSize=12;" vertex="1" parent="lane4">
+          <mxGeometry x="1100" y="90" width="200" height="50" as="geometry"/>
+        </mxCell>
+
+        <!-- ===== LANE 5: Kho ===== -->
+        <mxCell id="lane5" value="Thủ kho" style="swimlane;startSize=30;horizontal=0;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=12;fontStyle=1;swimlaneHead=0;" vertex="1" parent="swim-main">
+          <mxGeometry y="730" width="1560" height="130" as="geometry"/>
+        </mxCell>
+
+        <!-- Step 11: Update trạng thái -->
+        <mxCell id="s11" value="&lt;b&gt;11. Cập nhật trạng thái&lt;/b&gt;&lt;br&gt;Đang giao / Đã giao / Hủy" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;arcSize=12;" vertex="1" parent="lane5">
+          <mxGeometry x="1100" y="35" width="200" height="60" as="geometry"/>
+        </mxCell>
+
+        <!-- Step 12: Nhập kho -->
+        <mxCell id="s12" value="&lt;b&gt;12. Nhập kho&lt;/b&gt;&lt;br&gt;Nhận hàng · Ghi SL thực nhận" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;arcSize=12;" vertex="1" parent="lane5">
+          <mxGeometry x="1260" y="35" width="200" height="60" as="geometry"/>
+        </mxCell>
+
+        <!-- ===== LANE 6: Kế toán ===== -->
+        <mxCell id="lane6" value="Kế toán" style="swimlane;startSize=30;horizontal=0;fillColor=#f8cecc;strokeColor=#b85450;fontSize=12;fontStyle=1;swimlaneHead=0;" vertex="1" parent="swim-main">
+          <mxGeometry y="860" width="1560" height="130" as="geometry"/>
+        </mxCell>
+
+        <!-- Step 17: Xử lý thanh toán -->
+        <mxCell id="s17" value="&lt;b&gt;17. Xử lý thanh toán&lt;/b&gt;&lt;br&gt;Nhập thông tin TT · Đóng invoice" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=11;arcSize=12;" vertex="1" parent="lane6">
+          <mxGeometry x="1380" y="35" width="160" height="60" as="geometry"/>
+        </mxCell>
+
+        <!-- END -->
+        <mxCell id="end" value="Hoàn tất" style="ellipse;whiteSpace=wrap;html=1;fillColor=#647687;strokeColor=#314354;fontColor=#ffffff;fontSize=12;fontStyle=1;" vertex="1" parent="lane6">
+          <mxGeometry x="1510" y="45" width="30" height="40" as="geometry"/>
+        </mxCell>
+
+        <!-- ============================= -->
+        <!-- ===== CONNECTORS ===== -->
+        <!-- ============================= -->
+
+        <!-- 1 → 2 -->
+        <mxCell id="e1-2" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="s1" target="s2" parent="lane1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- 1 → 3 (cross lane) notify -->
+        <mxCell id="e1-3" value="Notify mua hàng" style="edgeStyle=orthogonalEdgeStyle;dashed=1;fontSize=10;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" edge="1" source="s1" target="s3" parent="swim-main">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- 3 → 4 -->
+        <mxCell id="e3-4" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="s3" target="s4" parent="lane2">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- 4 → 5 -->
+        <mxCell id="e4-5" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="s4" target="s5" parent="lane2">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- 5 → 6 -->
+        <mxCell id="e5-6" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="s5" target="s6" parent="lane2">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- 5 → 7 -->
+        <mxCell id="e5-7" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="s5" target="s7" parent="lane2">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- 7 → 8 (cross lane: mua hang → NCC) -->
+        <mxCell id="e7-8" value="Link báo giá" style="edgeStyle=orthogonalEdgeStyle;dashed=0;fontSize=10;" edge="1" source="s7" target="s8" parent="swim-main">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- 8 → 9 (NCC → mua hang: submit báo giá) -->
+        <mxCell id="e8-9" value="Submit báo giá" style="edgeStyle=orthogonalEdgeStyle;dashed=1;fontSize=10;" edge="1" source="s8" target="s9" parent="swim-main">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- 9 → 10d (cross lane: mua hang → GĐ) -->
+        <mxCell id="e9-10" value="Submit duyệt" style="edgeStyle=orthogonalEdgeStyle;fontSize=10;" edge="1" source="s9" target="s10d" parent="swim-main">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- 9 → 15 (chỉnh sửa IPO) -->
+        <mxCell id="e9-15" value="Nếu cần sửa" style="edgeStyle=orthogonalEdgeStyle;dashed=1;fontSize=10;" edge="1" source="s9" target="s15" parent="lane2">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- 10d → approved -->
+        <mxCell id="e10-ok" value="Duyệt" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#82b366;fontColor=#3d6617;fontSize=10;" edge="1" source="s10d" target="s10ok" parent="lane4">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- 10d → rejected -->
+        <mxCell id="e10-no" value="Từ chối" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#b85450;fontColor=#6d1f1c;fontSize=10;" edge="1" source="s10d" target="s10no" parent="lane4">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- rejected → back to s9 (chỉnh sửa) -->
+        <mxCell id="e10no-back" value="Trả về chỉnh sửa" style="edgeStyle=elbowEdgeStyle;dashed=1;strokeColor=#b85450;fontColor=#6d1f1c;fontSize=10;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="s10no" target="s15" parent="swim-main">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1200" y="750"/>
+              <mxPoint x="1200" y="620"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- 10ok → 11 (cross lane: GĐ → Kho) -->
+        <mxCell id="e10ok-11" value="Gửi order chính thức" style="edgeStyle=orthogonalEdgeStyle;fontSize=10;" edge="1" source="s10ok" target="s11" parent="swim-main">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- 11 → 12 -->
+        <mxCell id="e11-12" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="s11" target="s12" parent="lane5">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- 12 → 13 (cross lane: Kho → Bộ phận) -->
+        <mxCell id="e12-13" value="Hàng vào kho" style="edgeStyle=orthogonalEdgeStyle;dashed=1;fontSize=10;" edge="1" source="s12" target="s13" parent="swim-main">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- 12 → 14 (cross lane: Kho → Mua hàng) -->
+        <mxCell id="e12-14" value="Nhập hóa đơn" style="edgeStyle=orthogonalEdgeStyle;dashed=1;fontSize=10;" edge="1" source="s12" target="s14" parent="swim-main">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- 14 → 16 -->
+        <mxCell id="e14-16" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="s14" target="s16" parent="lane2">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- 16 → 17 (cross lane: Mua hàng → Kế toán) -->
+        <mxCell id="e16-17" value="Yêu cầu thanh toán" style="edgeStyle=orthogonalEdgeStyle;fontSize=10;" edge="1" source="s16" target="s17" parent="swim-main">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- 17 → END -->
+        <mxCell id="e17-end" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="s17" target="end" parent="lane6">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- START node -->
+        <mxCell id="start" value="Bắt đầu" style="ellipse;whiteSpace=wrap;html=1;fillColor=#647687;strokeColor=#314354;fontColor=#ffffff;fontSize=12;fontStyle=1;" vertex="1" parent="lane1">
+          <mxGeometry x="10" y="60" width="30" height="40" as="geometry"/>
+        </mxCell>
+        <mxCell id="e-start-1" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="start" target="s1" parent="lane1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
