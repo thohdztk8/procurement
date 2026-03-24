@@ -2,6 +2,7 @@ from rest_framework import generics, status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
+from django.utils import timezone
 from .models import QuotationSession, QuotationLine
 from .serializers import (
     QuotationSessionSerializer, SendQuotationSerializer,
@@ -60,3 +61,41 @@ class SelectQuotationView(APIView):
         order.status = PurchaseOrder.STATUS_IPO_DRAFT
         order.save(update_fields=["status", "updated_at"])
         return Response({"detail": "Đã chốt báo giá. Có thể xuất IPO."})
+
+
+class SupplierQuotationPortalView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request, token):
+        """Supplier truy cập portal báo giá qua token"""
+        try:
+            session = QuotationSession.objects.get(quotation_token=token)
+        except QuotationSession.DoesNotExist:
+            return Response({"detail": "Token không hợp lệ hoặc đã hết hạn."}, status=404)
+        if session.token_expiry < timezone.now():
+            return Response({"detail": "Token đã hết hạn."}, status=410)
+        data = QuotationSessionSerializer(session).data
+        return Response(data)
+
+    def post(self, request, token):
+        """Supplier submit báo giá qua token"""
+        try:
+            session = QuotationSession.objects.get(quotation_token=token)
+        except QuotationSession.DoesNotExist:
+            return Response({"detail": "Token không hợp lệ hoặc đã hết hạn."}, status=404)
+        if session.token_expiry < timezone.now():
+            return Response({"detail": "Token đã hết hạn."}, status=410)
+        if session.status != QuotationSession.STATUS_PENDING:
+            return Response({"detail": "Phiên báo giá đã đóng hoặc đã submit."}, status=400)
+        serializer = SupplierQuotationSubmitSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        for line in serializer.validated_data["lines"]:
+            try:
+                ql = QuotationLine.objects.get(pk=line["quotation_line_id"], session=session)
+                ql.unit_price = line["unit_price"]
+                ql.save(update_fields=["unit_price"])
+            except QuotationLine.DoesNotExist:
+                continue
+        session.status = QuotationSession.STATUS_SUBMITTED
+        session.save(update_fields=["status"])
+        return Response({"detail": "Đã submit báo giá thành công."})
