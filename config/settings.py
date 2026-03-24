@@ -45,9 +45,23 @@ LOCAL_APPS = [
     "apps.audit_log",
 ]
 
-INSTALLED_APPS = AUTH_APPS + DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
-
-LOCAL_APPS = AUTH_APPS + LOCAL_APPS
+INSTALLED_APPS = (
+    ["apps.authentication"]
+    + DJANGO_APPS
+    + THIRD_PARTY_APPS
+    + [
+        "apps.master_data",
+        "apps.requisition",
+        "apps.cart",
+        "apps.quotation",
+        "apps.ipo",
+        "apps.warehouse",
+        "apps.finance",
+        "apps.notifications",
+        "apps.reports",
+        "apps.audit_log",
+    ]
+)
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",

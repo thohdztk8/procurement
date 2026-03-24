@@ -65,6 +65,24 @@ services:
         python manage.py migrate authentication &&
         python manage.py migrate &&
         python manage.py seed_roles &&
+        python manage.py makemigrations master_data &&
+        python manage.py migrate master_data &&
+        python manage.py makemigrations cart &&
+        python manage.py migrate cart &&
+        python manage.py makemigrations finance &&
+        python manage.py migrate finance &&
+        python manage.py makemigrations ipo &&
+        python manage.py migrate ipo &&
+        python manage.py makemigrations notifications &&
+        python manage.py migrate notifications &&
+        python manage.py makemigrations reports &&
+        python manage.py migrate reports &&
+        python manage.py makemigrations audit_log &&
+        python manage.py migrate audit_log &&
+        python manage.py makemigrations requisition &&
+        python manage.py migrate requisition &&
+        python manage.py makemigrations warehouse &&
+        python manage.py migrate warehouse &&
         python manage.py collectstatic --noinput &&
         gunicorn config.wsgi:application --bind 0.0.0.0:8000
       "
